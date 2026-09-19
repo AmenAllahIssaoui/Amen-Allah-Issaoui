@@ -1,0 +1,244 @@
+SHADING CIPHER
+Étude scientifique approfondie d’un système symbolique de codage positionnel, de calcul
+modulaire et de représentation numérique hiérarchique
+Auteur et concepteur : Amen Allah Issaoui
+Version académique approfondie — 2026
+© 2026 Amen Allah Issaoui — Tous droits réservés
+Résumé
+Cette étude propose une formalisation approfondie de Shading Cipher, un système symbolique original destiné à
+représenter des lettres, des mots, des nombres, des espaces et certains caractères spéciaux au moyen d’une
+architecture structurée. Le système repose sur la partition de l’alphabet latin en groupes fixes, l’utilisation d’une
+représentation modulaire fondée sur modulo 8, l’ajout de marqueurs positionnels indiquant les limites des mots et
+l’organisation hiérarchique des nombres au moyen de familles S, SS, SSS, etc.
+L’objectif de cette recherche n’est pas de présenter Shading Cipher comme un mécanisme cryptographique
+sécurisé, mais d’étudier comment une convention symbolique peut être transformée en une spécification formelle,
+implémentable, testable et extensible. L’analyse distingue ainsi clairement codage, représentation symbolique et
+chiffrement cryptographique.
+La présente version approfondit les définitions, les invariants, les algorithmes, les questions de validation, la
+complexité, les limites et les perspectives de développement.
+Mots-clés
+Codage symbolique ; représentation formelle ; arithmétique modulaire ; alphabet partitionné ; algorithmique ;
+analyse syntaxique ; décodage réversible ; tests logiciels ; langages symboliques.
+1. Introduction générale
+La conception de systèmes symboliques constitue un point de rencontre entre les mathématiques discrètes,
+l’informatique théorique, la programmation et l’étude des langages formels. Un tel système peut avoir plusieurs
+objectifs : représenter une information, normaliser une structure, faciliter une transformation algorithmique ou
+expérimenter une convention de communication.
+Shading Cipher s’inscrit dans cette perspective. Il ne cherche pas prioritairement à dissimuler une information au
+moyen d’une clé secrète, mais à produire une représentation systématique dans laquelle chaque élément du
+texte initial possède une correspondance définie.
+La question centrale peut être formulée ainsi : comment transformer une séquence linguistique hétérogène en
+une structure symbolique déterministe, tout en conservant une procédure inverse permettant de reconstruire
+l’entrée normalisée ?
+Cette question implique plusieurs exigences : non-ambiguïté, déterminisme, réversibilité, validation syntaxique,
+extensibilité et documentation.
+2. Objectifs et questions de recherche
+Les objectifs principaux sont les suivants :
+1. Décrire formellement la structure alphabétique du système.
+2. Définir la transformation modulaire appliquée aux lettres.
+3. Formaliser les marqueurs de début et de fin de mot.
+4. Décrire l’encodage hiérarchique des nombres.
+5. Définir les symboles réservés et les séparateurs.
+6. Construire des algorithmes réciproques de codage et de décodage.
+7. Identifier les invariants nécessaires à la réversibilité.
+8. Évaluer les limites du système du point de vue scientifique et cryptographique.
+9. Proposer une architecture logicielle testable et maintenable.
+3. Positionnement conceptuel
+Il convient de distinguer trois notions :
+Codage : transformation d’une information selon une convention déterminée, généralement réversible si la
+convention le permet.
+Représentation symbolique : organisation d’éléments sous une forme structurée afin de rendre leur traitement
+ou leur interprétation systématiques.
+Chiffrement : transformation visant la confidentialité et reposant habituellement sur une clé et des propriétés de
+sécurité évaluables.
+Shading Cipher appartient principalement aux deux premières catégories. La connaissance de sa spécification
+suffit en principe à reconstruire le message codé. Son apparence inhabituelle ne constitue donc pas une preuve
+de sécurité.
+4. Modèle formel du système
+On peut représenter le système par une fonction de codage :
+E : X → Y
+où X désigne l’ensemble des textes admissibles après normalisation et Y l’ensemble des représentations codées
+valides.
+Le décodage est une fonction partielle :
+D : Y → X
+La propriété fondamentale recherchée est :
+D(E(x)) = N(x)
+où N représente la fonction de normalisation appliquée au texte initial.
+Cette formulation est importante : la réversibilité porte sur le texte normalisé, et non nécessairement sur chaque
+détail graphique de l’entrée, notamment la casse lorsque celle-ci n’est pas conservée.
+5. Partition de l’alphabet latin
+L’alphabet latin est réparti en quatre groupes :
+G■ = {A, B, C, D, E, F, G, H}
+G■ = {I, J, K, L, M, N, O, P}
+G■ = {Q, R, S, T, U, V, W, X}
+G■ = {Y, Z}
+Les trois premiers groupes contiennent huit lettres et le quatrième en contient deux. Chaque lettre est donc
+décrite par un couple (groupe, position).
+Cette représentation sépare deux informations : l’identité du groupe et la position locale de la lettre dans ce
+groupe.
+6. Arithmétique modulaire
+Pour une position originale p, le système utilise :
+r = p mod 8
+La convention modulaire produit 0 lorsque p = 8. Ainsi, H, P et X peuvent recevoir un rang modulaire égal à 0,
+bien que leur position originale soit 8.
+Cette distinction doit être explicitement documentée afin d’éviter une confusion entre position ordinale et
+représentation normalisée.
+7. Structure positionnelle des mots
+Le système ajoute une information syntaxique au code de chaque lettre. M marque le début d’un mot et E sa fin.
+Pour un mot de longueur n :
+- si n = 1 : M + code + E ;
+- si n > 1 : M + code■ + séparateurs + ... + code■ + E.
+Cette stratégie permet au décodeur de reconnaître les limites des mots sans dépendre uniquement des espaces
+externes.
+8. Alphabet codé et exemples
+La table de correspondance fondamentale est :
+A → I1 ; B → I2 ; C → I3 ; D → I4 ; E → I5 ; F → I6 ; G → I7 ; H → I0
+I → II1 ; J → II2 ; K → II3 ; L → II4 ; M → II5 ; N → II6 ; O → II7 ; P → II0
+Q → III1 ; R → III2 ; S → III3 ; T → III4 ; U → III5 ; V → III6 ; W → III7 ; X → III0
+Y → IV1 ; Z → IV2
+Exemples :
+H → MI0E
+HI → MI0-II1E
+HELLO → MI0-I5-II4-II4-II7E
+9. Séparateurs et symboles réservés
+Le séparateur « - » distingue les codes alphabétiques successifs à l’intérieur d’un mot. Il ne représente pas une
+lettre.
+L’espace est représenté par __. Cette convention exige que le décodeur traite les symboles réservés avant les
+unités ordinaires lorsque des séquences peuvent se chevaucher.
+Une règle de correspondance la plus longue est recommandée pour les symboles spéciaux. Elle réduit les
+risques d’interprétation prématurée d’une séquence composée.
+10. Représentation numérique hiérarchique
+Les nombres sont traités dans une couche distincte du codage alphabétique. Les familles sont organisées selon
+une progression :
+S, SS, SSS, SSSS, …
+Dans la version décrite, les plages sont structurées par blocs de dix. Le niveau d’un nombre positif k peut être
+défini par :
+level(k) = floor((k - 1) / 10) + 1
+La position locale est :
+local(k) = ((k - 1) mod 10) + 1
+Le zéro reçoit un traitement particulier : 0 → SA.
+11. Invariants du système
+Plusieurs invariants doivent être préservés :
+1. Chaque lettre admissible possède un code unique.
+2. Chaque code alphabétique valide renvoie à une seule lettre.
+3. Les marqueurs M et E correspondent à la structure du mot.
+4. Les séparateurs ne doivent pas être confondus avec des symboles originaux.
+5. Chaque nombre valide doit appartenir à une famille déterminable.
+6. Les symboles réservés doivent être reconnus sans ambiguïté.
+7. Le décodage d’un codage valide doit produire le texte normalisé initial.
+12. Algorithme de codage
+L’encodeur peut être décrit comme suit :
+1. Normaliser l’entrée.
+2. Convertir les lettres en majuscules si la casse n’est pas conservée.
+3. Lire le texte de gauche à droite.
+4. Identifier les mots, nombres, espaces et symboles spéciaux.
+5. Transformer chaque lettre en couple groupe/rang.
+6. Ajouter les marqueurs positionnels.
+7. Convertir les nombres vers leur représentation hiérarchique.
+8. Remplacer les espaces et symboles réservés.
+9. Produire la chaîne codée finale.
+13. Algorithme de décodage
+Le décodeur doit :
+1. Lire la chaîne codée de gauche à droite.
+2. Identifier les symboles réservés.
+3. Reconnaître les espaces codés.
+4. Détecter les séquences numériques commençant par S.
+5. Séparer les codes alphabétiques au moyen du tiret structurel.
+6. Vérifier M et E selon la structure du mot.
+7. Convertir chaque couple groupe/rang en lettre.
+8. Reconstruire les mots et la séquence initiale normalisée.
+9. Signaler toute séquence invalide au moyen d’une erreur explicite.
+14. Exemple complet
+Message : HELLO 21
+HELLO devient :
+MI0-I5-II4-II4-II7E
+21 devient :
+SSSA
+L’espace devient :
+__
+Résultat :
+MI0-I5-II4-II4-II7E__SSSA
+Le décodage doit restituer :
+HELLO 21
+15. Architecture logicielle
+Une architecture modulaire est recommandée :
+alphabet.py : groupes alphabétiques et conversions.
+numbers.py : familles numériques et conversions inverses.
+symbols.py : symboles réservés.
+encoder.py : orchestration du codage.
+decoder.py : analyse et reconstruction.
+exceptions.py : erreurs spécialisées.
+cli.py : interface en ligne de commande.
+tests/ : tests unitaires et tests aller-retour.
+docs/specification.md : documentation normative.
+Cette séparation limite le couplage entre les composants et facilite l’évolution du système.
+16. Validation et stratégie de tests
+La propriété principale à tester est :
+decode(encode(x)) == normalize(x)
+Les tests doivent couvrir :
+- mots d’une, deux et plusieurs lettres ;
+- lettres situées à la position 8 ;
+- espaces consécutifs ou en bordure ;
+- nombres 0, 10, 11, 20, 21 et 30 ;
+- symboles spéciaux ;
+- caractères non pris en charge ;
+- séquences mal formées ;
+- ambiguïtés potentielles entre séparateurs et symboles.
+17. Analyse qualitative de la complexité
+Pour une entrée de longueur n, un encodeur parcourant chaque unité une seule fois peut viser une complexité
+temporelle de l’ordre de O(n), hors opérations particulières liées à la taille des nombres ou à des recherches non
+constantes.
+Le décodage peut également être conçu en O(n) avec des tables de correspondance et une analyse séquentielle.
+L’usage d’une règle de correspondance la plus longue pour les symboles spéciaux peut toutefois introduire un
+coût dépendant du nombre et de la longueur des motifs réservés.
+La complexité spatiale dépend principalement de la taille de la sortie, des tables de correspondance et des
+structures temporaires.
+18. Limites scientifiques
+Le système présente plusieurs limites :
+- il ne fournit pas de confidentialité cryptographique ;
+- la connaissance de la spécification permet le décodage ;
+- la casse n’est pas conservée dans la version actuelle ;
+- les zéros initiaux des nombres nécessitent une convention particulière ;
+- les familles numériques doivent être stabilisées dans une spécification normative ;
+- la prise en charge multilingue doit éviter de mélanger des règles alphabétiques incompatibles.
+19. Comparaison conceptuelle avec le chiffrement
+Contrairement à un chiffrement moderne, Shading Cipher ne repose pas sur une clé secrète et ne cherche pas à
+rendre le texte statistiquement indistinguable d’une autre séquence.
+Son intérêt réside plutôt dans la formalisation d’une représentation symbolique, la possibilité d’automatiser les
+transformations et l’étude de la réversibilité d’un langage construit.
+20. Perspectives de développement
+Les développements futurs peuvent inclure :
+1. une interface web interactive ;
+2. une bibliothèque Python distribuable ;
+3. une spécification JSON modifiable ;
+4. la conservation de la casse ;
+5. la conservation des zéros initiaux ;
+6. un support séparé du français et de l’arabe ;
+7. la génération automatique des tables ;
+8. des tests fondés sur les propriétés ;
+9. une analyse statistique de l’expansion ;
+10. une étude expérimentale de la résistance à l’analyse statistique, uniquement si le projet évolue vers un
+objectif cryptographique.
+21. Discussion
+La contribution principale de Shading Cipher doit être évaluée selon des critères adaptés à sa nature : cohérence
+interne, clarté des règles, déterminisme, réversibilité, extensibilité, qualité de l’implémentation et transparence
+quant à ses limites.
+Un système symbolique n’a pas besoin de prétendre être un chiffrement sécurisé pour posséder une valeur
+scientifique. Il peut constituer un objet d’étude en algorithmique, en conception de langages formels et en
+ingénierie logicielle.
+22. Conclusion générale
+Shading Cipher représente une tentative structurée de transformer une intuition symbolique en un système
+formel. Son architecture combine partition alphabétique, arithmétique modulaire, marqueurs positionnels,
+représentation numérique hiérarchique et table de symboles spéciaux.
+La poursuite du projet devra privilégier la stabilisation de la spécification, la définition des invariants, la mise en
+place d’une suite de tests complète et la documentation des décisions de conception.
+La valeur de cette recherche réside dans le passage d’une idée personnelle à une construction analysable,
+implémentable et perfectible, à l’intersection des mathématiques discrètes, de la programmation et de la
+conception de systèmes symboliques.
+Déclaration d’auteur et droits intellectuels
+Ce document présente une étude approfondie du système Shading Cipher.
+Auteur et concepteur : Amen Allah Issaoui
+Droits d’auteur : © 2026 Amen Allah Issaoui — Tous droits réservés.
+Toute reproduction, adaptation, redistribution ou exploitation substantielle de ce document, de sa structure
+originale ou de ses éléments conceptuels doit mentionner clairement l’auteur et respecter la législation applicable
+en matière de propriété intellectuelle.
